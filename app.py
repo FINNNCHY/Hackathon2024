@@ -1,4 +1,13 @@
 from flask import Flask, render_template, request, jsonify
+import constants
+import os
+os.environ['AZURE_OPENAI_API_KEY'] = constants.API_KEY
+os.environ['AZURE_OPENAI_ENDPOINT'] = constants.AZURE_OPENAI_ENDPOINT
+os.environ['OPENAI_API_VERSION'] = constants.OPENAI_API_VERSION
+
+import openai
+
+client = openai.AzureOpenAI()
 
 app = Flask(__name__)
 
@@ -10,10 +19,31 @@ def home():
 def get_bot_response():
     user_input = request.form['msg']
     #mocking the response here, this will be an actual request to whatever LLM
-    response = {"response": str(send_bot_request())}
+    response = {"response": str(real_request(user_input))}
     return jsonify(response)
     #bot_response = chatbot.get_response(user_input)
     #return jsonify(response=str(bot_response))
+
+def real_request(msg):
+    msgs= [
+        
+        {
+            "role":"user",
+            "content": "Use this document as a reference, do not explain your answers just return the answer"
+        },
+        {
+            "role":"user",
+            "content": "Any response you give, return it in html format with the root element as a div with inline css, the response will be rendered on a website"
+        },
+        {
+            "role":"user",
+            "content": msg
+        }
+    ]
+    response = client.chat.completions.create(model='gpt-4-vision', messages=msgs, max_tokens=4096)
+    return response.choices[0].message.content
+
+
 
 def send_bot_request():
     # do the request
@@ -141,4 +171,4 @@ def send_bot_request():
 }'''
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8888)
+    app.run(port=8888)

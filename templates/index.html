@@ -16,7 +16,6 @@
         }
         .chat-container {
             width: 50%;
-            max-width: 600px;
             margin: 0 auto;
             border: 1px solid #ccc;
             border-radius: 10px;
@@ -24,7 +23,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .chat-box {
-            height: 300px;
+            max-height: 1080px;
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
@@ -71,6 +70,14 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        function addResponse(message){
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
         function sendMessage() {
             const userInput = document.getElementById('user-input');
             const message = userInput.value;
@@ -87,7 +94,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                addMessage("Chatbot", data.response);
+                addResponse(data.response);
                 userInput.value = "";
             });
         }
