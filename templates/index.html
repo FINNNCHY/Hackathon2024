@@ -23,6 +23,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .chat-box {
+            min-height: 300px;
             max-height: 1080px;
             overflow-y: auto;
             border: 1px solid #ccc;
@@ -72,9 +73,14 @@
 
         function addResponse(message){
             const chatBox = document.getElementById('chat-box');
+            const wrapper = document.createElement('div');
+            const respElement = document.createElement('div');
+            respElement.textContent = "Bot: ";
             const messageElement = document.createElement('div');
             messageElement.innerHTML = message;
-            chatBox.appendChild(messageElement);
+            wrapper.appendChild(respElement);
+            wrapper.appendChild(messageElement);
+            chatBox.appendChild(wrapper);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
