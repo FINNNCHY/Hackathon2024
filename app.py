@@ -25,13 +25,23 @@ def get_bot_response():
     #return jsonify(response=str(bot_response))
 
 def real_request(msg):
-    msgs= [{
-        "role":"user",
-        "content": msg
-    }]
-    response = client.chat.completions.create(model='gpt-4-vision', messages=msgs)
-    answer = response.choices[0].message.content
-    return answer
+    msgs= [
+        
+        {
+            "role":"user",
+            "content": "Use this document as a reference, do not explain your answers just return the answer"
+        },
+        {
+            "role":"user",
+            "content": "Any response you give, return it in html format with the root element as a div with inline css, the response will be rendered on a website"
+        },
+        {
+            "role":"user",
+            "content": msg
+        }
+    ]
+    response = client.chat.completions.create(model='gpt-4-vision', messages=msgs, max_tokens=4096)
+    return response.choices[0].message.content
 
 
 
@@ -161,4 +171,4 @@ def send_bot_request():
 }'''
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8888)
+    app.run(port=8888)

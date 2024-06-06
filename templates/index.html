@@ -71,6 +71,14 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        function addResponse(message){
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
         function sendMessage() {
             const userInput = document.getElementById('user-input');
             const message = userInput.value;
@@ -87,7 +95,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                addMessage("Chatbot", data.response);
+                addResponse(data.response);
                 userInput.value = "";
             });
         }
